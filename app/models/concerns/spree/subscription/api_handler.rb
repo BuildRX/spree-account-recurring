@@ -7,11 +7,16 @@ module Spree
         attr_accessor :card_token
         before_create :subscribe
         before_update :unsubscribe, :if => [:unsubscribed_at_changed?, :unsubscribed_at?]
+        before_update :change_plan, :if => [:plan_id_changed?]
       end
 
       def subscribe
         provider.subscribe(self)
         self.subscribed_at = Time.current
+      end
+
+      def change_plan
+        provider.change_plan(self)
       end
 
       def unsubscribe
