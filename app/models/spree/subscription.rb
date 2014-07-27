@@ -20,6 +20,17 @@ module Spree
 
     validate :verify_plan, on: :create
 
+    def api_subscription
+      return unless stripe_subscription_id
+      user.api_customer.subscriptions.retrieve(stripe_subscription_id)
+    end
+
+    def future?
+      now = Time.now.to_i
+      trial_end = (api_subscription && api_subscription['trial_end'])
+      trial_end && (now < trial_end)
+    end
+
     private
 
     def set_email

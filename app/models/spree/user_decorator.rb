@@ -11,4 +11,5 @@ Spree::User.class_eval do
   def api_customer
     Stripe::Customer.retrieve(stripe_customer_id)
   end
+
 end
